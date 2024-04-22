@@ -2,6 +2,15 @@ const express = require('express')
 const router = express.Router()
 const bodyParser = require('body-parser')
 const controller = require('../controllers/index')
+const session = require('express-session') 
+const sessionStorage = require('../util/sessionStorage')
+
+app.use(session({
+    secret: 'alura',
+    resave: false,
+    saveUninitialized: false,
+    store: sessionStorage
+  }))
 
 router.use(bodyParser.urlencoded({ extended: true }))
 

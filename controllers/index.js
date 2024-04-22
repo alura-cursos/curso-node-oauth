@@ -1,3 +1,4 @@
+const { render } = require('ejs')
 const User = require('../models/user')
 
 exports.showIndex = (req, res, next) => {
@@ -25,5 +26,20 @@ exports.signup = (req, res, next) => {
     } catch (err) {
         console.log(err);
         res.redirect('signup')
+    }
+}
+
+exports.login = async(req, res, next) => {
+    const {email, password} = req.body
+    const user = await User.findOne(email, password)
+    try {
+        if (user) {
+            res.redirect('/members')
+        } else {
+            res.render('index')
+        }
+    } catch (err) {
+        console.log(err)
+        res.render('index')
     }
 }

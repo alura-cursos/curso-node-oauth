@@ -1,4 +1,4 @@
-const User = require("../models/user")
+const User = require('../models/user')
 const bcrypt = require('bcrypt')
 
 exports.showIndex = (req, res, next) => {
@@ -22,10 +22,25 @@ exports.signup = async(req, res, next) => {
     const hashedPassword = await bcrypt.hash(password, 10)
     const user = new User(username, email, hashedPassword)
     try {
-        await user.save()
+        user.save()
         res.redirect('/')
     } catch (err) {
+        console.log(err);
+        res.redirect('signup')
+    }
+}
+
+exports.login = async(req, res, next) => {
+    const {email, password} = req.body
+    const user = await User.findOne(email, password)
+    try {
+        if (user) {
+            res.redirect('/members')
+        } else {
+            res.render('index')
+        }
+    } catch (err) {
         console.log(err)
-        res.redirect('signup')        
+        res.render('index')
     }
 }

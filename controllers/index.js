@@ -13,3 +13,8 @@ exports.showMembersPage = (req, res) => {
 exports.get404Page = (req, res, next) => {
     res.status(404).render('404')
 }
+
+exports.signup = (req, res, next) => {
+    const {username, email, password} = req.body
+    console.log(username, email, password);
+}

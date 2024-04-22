@@ -1,5 +1,5 @@
-const { render } = require('ejs')
-const User = require('../models/user')
+const User = require("../models/user")
+const bcrypt = require('bcrypt')
 
 exports.showIndex = (req, res, next) => {
     res.render('index')
@@ -17,29 +17,15 @@ exports.get404Page = (req, res, next) => {
     res.status(404).render('404')
 }
 
-exports.signup = (req, res, next) => {
+exports.signup = async(req, res, next) => {
     const {username, email, password} = req.body
-    const user = new User(username, email, password)
+    const hashedPassword = await bcrypt.hash(password, 10)
+    const user = new User(username, email, hashedPassword)
     try {
-        user.save()
+        await user.save()
         res.redirect('/')
     } catch (err) {
-        console.log(err);
-        res.redirect('signup')
-    }
-}
-
-exports.login = async(req, res, next) => {
-    const {email, password} = req.body
-    const user = await User.findOne(email, password)
-    try {
-        if (user) {
-            res.redirect('/members')
-        } else {
-            res.render('index')
-        }
-    } catch (err) {
         console.log(err)
-        res.render('index')
+        res.redirect('signup')        
     }
 }

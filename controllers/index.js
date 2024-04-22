@@ -44,3 +44,12 @@ exports.login = async(req, res, next) => {
         res.render('index')
     }
 }
+
+exports.checkAuth = (req, res, next) => {
+    const auth = false
+    if (auth) {
+        next()
+    } else {
+        res.redirect('/')
+    }
+}

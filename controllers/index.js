@@ -1,3 +1,5 @@
+const User = require('../models/user')
+
 exports.showIndex = (req, res, next) => {
     res.render('index')
 }
@@ -16,5 +18,12 @@ exports.get404Page = (req, res, next) => {
 
 exports.signup = (req, res, next) => {
     const {username, email, password} = req.body
-    console.log(username, email, password);
+    const user = new User(username, email, password)
+    try {
+        user.save()
+        res.redirect('/')
+    } catch (err) {
+        console.log(err);
+        res.redirect('signup')
+    }
 }
